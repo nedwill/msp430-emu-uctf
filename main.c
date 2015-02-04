@@ -231,7 +231,9 @@ main(int argc, char **argv)
 
 	signal(SIGINT, ctrlc_handler);
 
-	registers[PC] = memword(0xfffe);
+	//registers[PC] = memword(0xfffe);
+	registers[PC] = 0x4400;
+	//printf("Got registers[PC] = %d.\n", registers[PC]);
 
 	if (waitgdb)
 		gdbstub_init();
@@ -277,6 +279,7 @@ emulate1(void)
 
 	pc_start = registers[PC];
 	instr_size = 2;
+	//printf("Starting from pc_start = %d.\n", pc_start);
 
 #ifdef BF
 	if (registers[PC] & 0x1) {
@@ -469,7 +472,10 @@ inc_reg(uint16_t reg, uint16_t bw)
 	uint16_t inc = 2;
 
 	if (reg != PC && reg != SP && bw)
+	{
+		//printf("inc1 case.\n");
 		inc = 1;
+	}
 
 #if SYMBOLIC
 	ASSERT(!isregsym(reg), "symbolic reg(%u): can't inc", (uns)reg);
@@ -815,6 +821,8 @@ handle_single(uint16_t instr)
 			}
 #endif
 		}
+
+		//printf("current res_val = %d.\n", res);
 
 		if (dstkind == OP_REG) {
 			ASSERT(res != (uns)-1, "res never set");

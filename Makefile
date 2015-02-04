@@ -2,7 +2,7 @@ FLAGS=-Wall -Wextra -std=gnu99 -Wno-unused-function -Wno-unused-variable
 SAFEFLAGS=$(FLAGS) -Wp,-D_FORTIFY_SOURCE=2 -fexceptions
 #OPTFLAGS=`rpm -E %optflags` -O3
 EXTRAFLAGS=
-NEWGCCFLAGS=-grecord-gcc-switches -fstack-protector-strong --param=ssp-buffer-size=4
+NEWGCCFLAGS=-grecord-gcc-switches --param=ssp-buffer-size=4
 OPTFLAGS=-O3 -g -pipe -m64 -mtune=native -march=native -flto $(NEWGCCFLAGS)
 DBGFLAGS=-O0 -g -pipe -m64 -mtune=native -march=native -flto $(NEWGCCFLAGS)
 GLIB_FLAGS=`pkg-config --cflags glib-2.0`
