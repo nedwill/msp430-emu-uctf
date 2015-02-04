@@ -8,8 +8,8 @@ DBGFLAGS=-O0 -g -pipe -m64 -mtune=native -march=native -flto $(NEWGCCFLAGS)
 GLIB_FLAGS=`pkg-config --cflags glib-2.0`
 GLIB_LDFLAGS=`pkg-config --libs glib-2.0`
 
-msp430-emu: main.c emu.h gdbstub.c
-	gcc $(OPTFLAGS) $(SAFEFLAGS) $(GLIB_FLAGS) $< gdbstub.c -o $@ $(GLIB_LDFLAGS)
+msp430-emu: main.c emu.h
+	gcc $(OPTFLAGS) $(SAFEFLAGS) $(GLIB_FLAGS) $< -o $@ $(GLIB_LDFLAGS)
 
 msp430-sym: main.c emu.h gdbstub.c
 	gcc $(OPTFLAGS) $(SAFEFLAGS) $(GLIB_FLAGS) -DSYMBOLIC=1 $< gdbstub.c -o $@ $(GLIB_LDFLAGS)

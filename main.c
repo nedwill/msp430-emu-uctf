@@ -84,6 +84,7 @@ mksexp(enum sexp_kind sk, unsigned nargs, ...)
 }
 #endif
 
+#ifndef __APPLE__
 void
 print_ips(void)
 {
@@ -95,6 +96,7 @@ print_ips(void)
 	printf("Approx. %ju instructions per second (Total: %ju).\n",
 	    (uintmax_t)insns * 1000000 / (end - start), (uintmax_t)insns);
 }
+#endif
 
 void
 init(void)
@@ -102,7 +104,9 @@ init(void)
 
 	insns = 0;
 	off = unlocked = false;
+#ifndef __APPLE__
 	start = now();
+#endif
 	//memset(memory, 0, sizeof(memory));
 	memset(registers, 0, sizeof registers);
 	memset(pageprot, DEP_R|DEP_W|DEP_X, sizeof pageprot);
@@ -235,16 +239,22 @@ main(int argc, char **argv)
 	registers[PC] = 0x4400;
 	//printf("Got registers[PC] = %d.\n", registers[PC]);
 
+#ifndef __APPLE__
 	if (waitgdb)
 		gdbstub_init();
+#endif
 
 	emulate();
 
 	printf("Got CPUOFF, stopped.\n");
+#ifndef __APPLE__
 	gdbstub_stopped();
+#endif
 
 	print_regs();
+#ifndef __APPLE__
 	print_ips();
+#endif
 
 	if (tracefile)
 		fclose(tracefile);
@@ -417,8 +427,10 @@ emulate(void)
 			stepone = true;
 		}
 
+#ifndef __APPLE__
 		if (!replay_mode)
 			gdbstub_intr();
+#endif
 
 		if (replay_mode && insnreplaylim < insns) {
 			init();
@@ -1490,10 +1502,14 @@ abort_nodump(void)
 {
 
 	print_regs();
+#ifndef __APPLE__
 	print_ips();
+#endif
 
 #ifndef EMU_CHECK
+#ifndef __APPLE__
 	gdbstub_stopped();
+#endif
 #endif
 	exit(1);
 }
@@ -1654,6 +1670,7 @@ andflags(uint16_t res, uint16_t *set, uint16_t *clr)
 	}
 }
 
+#ifndef __APPLE__
 uint64_t
 now(void)
 {
@@ -1665,6 +1682,7 @@ now(void)
 
 	return ((uint64_t)sec * ts.tv_sec + (ts.tv_nsec / 1000));
 }
+#endif
 
 void
 callgate(unsigned op)
@@ -1755,7 +1773,9 @@ win(void)
 
 	printf("The lock opens; you win!\n\n");
 	print_regs();
+#ifndef __APPLE__
 	print_ips();
+#endif
 	off = true;
 	unlocked = true;
 }
