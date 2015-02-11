@@ -155,7 +155,7 @@ usage(void)
 	printf("usage: msp430-emu FLAGS [binaryimage]\n"
 		"\n"
 		"  FLAGS:\n"
-		"    -g            Debug with GDB\n"
+		"    -g            Debug with GDB (Linux only)\n"
 		"    -t=TRACEFILE  Emit instruction trace\n"
 		"    -x            Trace output in hex\n");
 #endif
@@ -184,6 +184,10 @@ main(int argc, char **argv)
 	while ((opt = getopt(argc, argv, "gt:x")) != -1) {
 		switch (opt) {
 		case 'g':
+#ifdef __APPLE__
+		printf("GDB debugging not supported on Mac. Try Vagrant.\n");
+		exit(1);
+#endif
 			waitgdb = true;
 			break;
 		case 't':
