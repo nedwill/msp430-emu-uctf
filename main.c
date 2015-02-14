@@ -1,6 +1,7 @@
 #include <unistd.h>
 
 #include "emu.h"
+#include <signal.h>
 
 struct inprec {
 	uint64_t	 ir_insn;
@@ -302,6 +303,11 @@ emulate1(void)
 		return;
 	}
 #else
+	if (!(registers[PC] & 0x1) == 0)
+	{
+		raise(SIGSEGV);
+        printf("pc unaligned, is %x.\n",registers[PC]);
+	}
 	ASSERT((registers[PC] & 0x1) == 0, "insn addr unaligned");
 #endif
 
@@ -1589,7 +1595,14 @@ print_regs(void)
 		if (!isregsym(i))
 			continue;
 
-		printf("r%d is symbolic:\n", i);
+        if (i == 0)
+        {
+            printf("pc is symbolic:\n");
+        }
+		else
+        {
+            printf("r%d is symbolic:\n", i);
+        }
 		printsym(regsym(i));
 		printf("/r%d\n", i);
 	}
