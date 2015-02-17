@@ -1796,7 +1796,7 @@ win(void)
 #endif
 	off = true;
 	unlocked = true;
-  raise(SIGSEGV);
+	raise(SIGSEGV);
 }
 
 #ifndef EMU_CHECK
