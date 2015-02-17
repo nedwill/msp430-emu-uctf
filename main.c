@@ -2,6 +2,8 @@
 
 #include "emu.h"
 #include <signal.h>
+#include <time.h>
+#include <stdlib.h>
 
 struct inprec {
 	uint64_t	 ir_insn;
@@ -112,6 +114,7 @@ init(void)
 	memset(registers, 0, sizeof registers);
 	memset(pageprot, DEP_R|DEP_W|DEP_X, sizeof pageprot);
 	dep_enabled = false;
+	srand(time(NULL));
 #if SYMBOLIC
 	memory_symbols = g_hash_table_new(NULL, NULL);
 	ASSERT(memory_symbols, "g_hash");
@@ -1763,7 +1766,7 @@ callgate(unsigned op)
 		break;
 	case 0x20:
 		// RNG
-		registers[15] = 0;
+		registers[15] = rand();
 		break;
 	case 0x7d:
 		// writes a non-zero byte to supplied pointer if password is
