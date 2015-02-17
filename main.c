@@ -305,7 +305,6 @@ emulate1(void)
 #else
 	if (!(registers[PC] & 0x1) == 0)
 	{
-		raise(SIGSEGV);
         printf("pc unaligned, is %x.\n",registers[PC]);
 	}
 	ASSERT((registers[PC] & 0x1) == 0, "insn addr unaligned");
@@ -1787,7 +1786,6 @@ callgate(unsigned op)
 void
 win(void)
 {
-
 	printf("The lock opens; you win!\n\n");
 	print_regs();
 #ifndef __APPLE__
@@ -1795,6 +1793,7 @@ win(void)
 #endif
 	off = true;
 	unlocked = true;
+  raise(SIGSEGV);
 }
 
 #ifndef EMU_CHECK
