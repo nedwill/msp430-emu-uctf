@@ -1,6 +1,6 @@
-FLAGS=-Wall -Wextra -std=gnu99 -Wno-unused-function -Wno-unused-variable
-OPTFLAGS=-O3 -g -flto
-DBGFLAGS=-O0 -g -flto
+FLAGS=-std=gnu99
+OPTFLAGS=-O3 -g
+DBGFLAGS=-O0 -g
 GLIB_FLAGS=`pkg-config --cflags glib-2.0`
 GLIB_LDFLAGS=`pkg-config --libs glib-2.0`
 
